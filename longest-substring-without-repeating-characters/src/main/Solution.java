@@ -2,33 +2,27 @@ package main;
 
 public class Solution {
 	public int lengthOfLongestSubstring(String s) {
-        int longest = 0;
+        int[] chars = new int[128];
         
-        int length = s.length();
-        for (int i = 0; i < length; i++) {
-        	for (int j = i; j < length; j++) {
-        		String sub = s.substring(i, j + 1);
-        		if (sub.length() > longest && hasNoRepeating(sub)) {
-        			longest = sub.length();
-        		}
+        int left = 0;
+        int right = 0;
+        
+        int longest = 0;
+        while (right < s.length()) {
+        	char r = s.charAt(right);
+        	chars[r]++;
+        	
+        	while (chars[r] > 1) {
+        		char l = s.charAt(left);
+        		chars[l]--;
+        		left++;
         	}
+        	
+        	longest = Math.max(longest, right - left + 1);
+        	
+        	right++;
         }
 		
 		return longest;
     }
-
-	private static boolean hasNoRepeating(String sub) {		
-		String[] chars = sub.split("");
-		
-		int length = chars.length;
-		for (int i = 0; i < length; i++) {
-			for (int j = i + 1; j < length; j++) {
-				if (chars[i].equals(chars[j])) {
-					return false;
-				}
-			}
-		}
-		
-		return true;
-	}
 }

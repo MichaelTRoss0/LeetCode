@@ -3,34 +3,29 @@ class Solution {
     	if (s == null || s.length() < 1) return "";
     	
         String palindrome = "";
-        int longest = 0;
         
-        int length = s.length();
-        for (int i = 0; i < length; i++) {
-        	// TODO Check for palindromes
+        int start = 0, end = 0;
+        for (int i = 0; i < s.length(); i++) {
+        	int len1 = expand(s, i, i);
+        	int len2 = expand(s, i, i + 1);
+        	int len = Math.max(len1, len2);
+        	if (len > end - start) {
+        		start = i - (len - 1) / 2;
+        		end = i + len / 2;
+        		palindrome = s.substring(start, end + 1);
+        	}
         }
-        
-//        for (int i = 0; i < length; i++) {
-//        	for (int j = i + 1; j <= length; j++) {
-//        		String sub = s.substring(i, j);
-//        		if (sub.length() > longest && isPalindrome(sub)) {
-//        			palindrome = sub;
-//        			longest = palindrome.length();
-//        		}
-//        	}
-//        }
     	
     	return palindrome;
     }
 
-	private boolean isPalindrome(String s) {
-		String[] a = s.split("");
-		
-		int length = a.length;
-		for (int i = 0; i < length / 2; i++) {
-			if (a[i].equals(a[length - i - 1]) == false) return false;
+	private int expand(String s, int left, int right) {
+		int x = 0;
+		while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+			left--;
+			right++;
+			x = right - left - 1;
 		}
-		
-		return true;
+		return x;
 	}
 }

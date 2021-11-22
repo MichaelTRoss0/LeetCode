@@ -4,8 +4,7 @@ import java.util.List;
 
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-    	ArrayList<List<Integer>> answer = new ArrayList<>();
-    	
+    	List<List<Integer>> answer = new ArrayList<>();
     	int length = nums.length;
     	
     	if (length < 3) return answer;
@@ -14,27 +13,37 @@ class Solution {
     	
     	for (int i = 0; i < length - 2; i++) {
     		int x = nums[i];
+    		if (i > 0 && x == nums[i-1]) continue;
     		if (x > 0) break;
     		
-    		for (int j = i+1; j < length - 1; j++) {
+    		int j = i + 1;
+    		int k = length - 1;
+    		
+    		while (j < k) {
     			int y = nums[j];
-    			if (x + y > 0) break;
-    			
-    			for (int k = j+1; k < length; k++) {
-    				int z = nums[k];
-    				if (z < 0) continue;
+    			int z = nums[k];
+
+                if (x+y+z == 0) {
+    				List<Integer> sum = new ArrayList<>();
+    				sum.add(x);
+    				sum.add(y);
+    				sum.add(z);
+    				answer.add(sum);
     				
-    				if (x + y + z == 0) {
-    					ArrayList<Integer> sum = new ArrayList<>(3);
-    					sum.add(x);
-    					sum.add(y);
-    					sum.add(z);
-    					
-    					if (!answer.contains(sum)) answer.add(sum);
-    				}
-    			} // End of third for loop
-    		} // End of second for loop
-    	} // End of first for loop
+    				j++;
+    				k--;
+    				while (j < k && nums[j] == nums[j-1])
+    					j++;
+    				while (j < k && nums[k] == nums[k+1])
+    					k--;
+    			} else if (x + y + z < 0) {
+    				j++;
+    			} else {
+    				k--;
+    			}
+    		}
+    		
+    	}
     	
         return answer;
     }
